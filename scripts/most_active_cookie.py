@@ -26,7 +26,7 @@ def main():
     try:
         (t_year, t_month, t_day) = tuple(map(int, target_date.split("-")))
 
-        with open(f'../log_files/{file_name}', 'r') as cookie_log:
+        with open(f'./log_files/{file_name}', 'r') as cookie_log:
             logs = iter(cookie_log.readlines())
 
             if file_name[-4:] == ".csv":
