@@ -2,6 +2,7 @@
 
 import argparse
 import sys
+from not_valid_date_exception import NotValidDateException
 
 parser = argparse.ArgumentParser(description='Process most active cookie')
 parser.add_argument('file_name',
@@ -25,7 +26,10 @@ def main():
 
     try:
         (t_year, t_month, t_day) = tuple(map(int, target_date.split("-")))
-
+        
+        if not date_valid(t_year, t_month, t_day):
+            raise NotValidDateException
+        
         with open(f'./log_files/{file_name}', 'r') as cookie_log:
             logs = iter(cookie_log.readlines())
 
@@ -59,11 +63,37 @@ def main():
 
     except (ValueError, TypeError):
         print("Enter date in a correct format")
+        
+    except NotValidDateException:
+        print("Enter a valid date")
 
     except Exception as error:
         print(repr(error))
 
     sys.exit(-1)
+    
+def date_valid(year, month, day): 
+    if year_valid(year):
+        if month_valid(month):
+            if day < 1:
+                return False
+            if month in [1, 3, 5, 7, 8, 10, 12]:
+                return day <= 31
+            elif month in [4, 6, 9, 11]:
+                return day <= 30
+            else:
+                return day <= 29 if is_leap_year(year) else day <=28 
+    else:
+        return False
+
+def month_valid(month):
+    return month >= 1 and month <= 12
+
+def year_valid(year):
+    return year >= 0
+
+def is_leap_year(year):
+    return year % 4 == 0 and (year % 100 != 0 or year % 400 == 0)
 
 if __name__ == '__main__':
     main()

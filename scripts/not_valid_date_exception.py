@@ -1,0 +1,3 @@
+class NotValidDateException(Exception):
+    pass
+    
